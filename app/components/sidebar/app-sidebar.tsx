@@ -12,11 +12,11 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  
 } from "@/components/ui/sidebar";
 import SearchInput from "../Search_Input";
 import UserProfile from "./User_Profile";
 import { SidebarLogo } from "./sidebar-header";
+import { ModeToggle } from "@/components/toggle-dark-mode";
 
 // Menu items.
 const items = [
@@ -42,10 +42,13 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarLogo />
+      <div className="m-auto my-2">
+        <ModeToggle/>
+      </div>
       <SidebarContent>
         <SidebarGroup>
           <SearchInput />
-          
+
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "./components/sidebar/app-sidebar";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ReactQueryProvider } from "@/components/react-query-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,20 +23,24 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SidebarProvider>
-          <AppSidebar />
-          <main className="flex flex-1 flex-col min-h-screen bg-background">
-            {children}
-          </main>
-        </SidebarProvider>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <ReactQueryProvider>
+            <SidebarProvider>
+              <AppSidebar />
+              <main className="flex=col flex-1 min-h-screen bg-background text-foreground">
+                {children}
+              </main>
+            </SidebarProvider>
+          </ReactQueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
