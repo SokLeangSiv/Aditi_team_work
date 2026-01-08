@@ -1,7 +1,9 @@
 "use client";
 
 import React, { use } from "react";
+
 import { useQuery } from "@tanstack/react-query";
+
 import {
   CheckCircle2,
   Clock,
@@ -269,10 +271,7 @@ export default function Dashboard() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-500 mt-1">Welcome back, John</p>
-      </div>
+      
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
         <StatsCard
