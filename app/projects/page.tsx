@@ -8,12 +8,13 @@ const ProjectsPage = () => {
     <>
       <Header
         title="Projects"
-        subTitle="5 total projects"
+        subTitle="3 active projects"
         link="/projects/new"
       />
       <Suspense fallback={<LoadingPage />}>
         <ProjectsBodyPage />
       </Suspense>
+      
     </>
   );
 };

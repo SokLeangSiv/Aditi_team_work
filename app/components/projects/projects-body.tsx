@@ -107,14 +107,9 @@ export default function ProjectsBodyPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-8">
+    <div className="flex-1 p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-10">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Projects</h1>
-          <p className="text-gray-600 mt-2">{projects.length} active projects</p>
-        </div>
-
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button className="shadow-sm">
@@ -152,7 +147,7 @@ export default function ProjectsBodyPage() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="color">Project Color</Label>
-                <Select value={color} onValueChange={(value: any) => setColor(value)}>
+                <Select value={color} onValueChange={(value: never) => setColor(value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Choose a color" />
                   </SelectTrigger>

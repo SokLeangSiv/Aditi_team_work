@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import SearchInput from "./Search_Input";
+import { Bell } from "lucide-react"
 
 type Props = {
     title: string;
@@ -20,12 +20,14 @@ export function Header({title, subTitle, link}: Props) {
       </div>
 
       <div className="flex items-center gap-3">
-        <SearchInput />
+        <Button variant="ghost" size="icon">
+            <Bell className="h-5 w-5" />
+        </Button>
         <Button>
           <Link href={link}>+ New Task</Link>
         </Button>
       </div>
-      
+
     </div>
   );
 }

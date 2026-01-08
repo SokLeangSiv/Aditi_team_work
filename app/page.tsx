@@ -9,7 +9,7 @@ export default async function Dashboard() {
     <>
       <Header
         title="Dashboard"
-        subTitle="Welcome to your dashboard"
+        subTitle="Welcome back, John"
         link="/dashboard/new"
       />
       <Suspense fallback={<DashboardSkeleton />}>
