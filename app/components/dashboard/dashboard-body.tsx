@@ -1,9 +1,7 @@
 "use client";
 
-import React, { use } from "react";
-
-import { useQuery } from "@tanstack/react-query";
-
+import React from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   CheckCircle2,
   Clock,
@@ -22,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import Link from "next/link";
+import { LucideIcon } from "lucide-react";
 
 // Types
 interface Task {
@@ -43,20 +42,51 @@ interface Project {
 
 // Fetch functions
 const fetchTasks = async (): Promise<Task[]> => {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
   const response = await fetch("http://localhost:3001/tasks");
-  if (!response.ok) throw new Error("Failed to fetch tasks");
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch tasks: ${response.status} ${response.statusText}`
+    );
+  }
   return response.json();
 };
 
 const fetchProjects = async (): Promise<Project[]> => {
   const response = await fetch("http://localhost:3001/projects");
-  if (!response.ok) throw new Error("Failed to fetch projects");
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch projects: ${response.status} ${response.statusText}`
+    );
+  }
   return response.json();
 };
 
-// Calculate statistics
+// Update task status
+const updateTaskStatus = async ({
+  id,
+  status,
+}: {
+  id: string;
+  status: "todo" | "in-progress" | "done";
+}): Promise<Task> => {
+  const response = await fetch(`http://localhost:3001/tasks/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ status }),
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to update task: ${response.status} ${response.statusText}`
+    );
+  }
+
+  return response.json();
+};
+
+// Calculate length total
 const calculateStats = (tasks: Task[]) => {
   const total = tasks.length;
   const completed = tasks.filter((t) => t.status === "done").length;
@@ -69,7 +99,7 @@ const calculateStats = (tasks: Task[]) => {
   return { total, completed, inProgress, overdue };
 };
 
-// Stats Card Component
+// Card Component
 const StatsCard = ({
   title,
   value,
@@ -80,7 +110,8 @@ const StatsCard = ({
   title: string;
   value: number;
   change: string;
-  icon: any;
+  // icon: any;
+  icon: LucideIcon;
   iconColor: string;
 }) => (
   <Card>
@@ -107,9 +138,13 @@ const StatsCard = ({
 const TaskItem = ({
   task,
   projectName,
+  onToggle,
+  isUpdating,
 }: {
   task: Task;
   projectName: string;
+  onToggle: (taskId: string, currentStatus: Task["status"]) => void;
+  isUpdating: boolean;
 }) => {
   const isOverdue =
     new Date(task.dueDate) < new Date() && task.status !== "done";
@@ -145,16 +180,17 @@ const TaskItem = ({
         <input
           type="checkbox"
           checked={task.status === "done"}
-          readOnly
-          className="h-4 w-4 rounded border-gray-300"
+          onChange={() => onToggle(task.id, task.status)}
+          disabled={isUpdating}
+          className="h-4 w-4 rounded border-gray-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         />
         <div className="flex-1">
           <h4
-            className={`font-medium ${
+            className={`font-medium transition-all ${
               task.status === "done"
                 ? "line-through text-gray-500"
                 : "text-gray-900"
-            }`}
+            } ${isUpdating ? "opacity-50" : ""}`}
           >
             {task.title}
           </h4>
@@ -177,7 +213,7 @@ const TaskItem = ({
 };
 
 // Loading Skeleton Component
-const DashboardBodyPage = () => (
+const DashboardSkeleton = () => (
   <div className="space-y-6">
     <div>
       <Skeleton className="h-8 w-48 mb-2" />
@@ -210,40 +246,103 @@ const DashboardBodyPage = () => (
 );
 
 // Error Component
-const ErrorDisplay = ({ message }: { message: string }) => (
+const ErrorDisplay = ({
+  message,
+  onRetry,
+}: {
+  message: string;
+  onRetry?: () => void;
+}) => (
   <Alert variant="destructive">
     <AlertTitle>Error</AlertTitle>
-    <AlertDescription>{message}</AlertDescription>
+    <AlertDescription className="flex items-center justify-between">
+      <span>{message}</span>
+      {onRetry && (
+        <button
+          onClick={onRetry}
+          className="ml-4 px-3 py-1 bg-red-100 text-red-800 rounded hover:bg-red-200 text-sm"
+        >
+          Retry
+        </button>
+      )}
+    </AlertDescription>
   </Alert>
 );
 
 // Main Dashboard Component
 export default function Dashboard() {
+  const queryClient = useQueryClient();
   const {
     data: tasks,
     isLoading: tasksLoading,
     error: tasksError,
+    refetch: refetchTasks,
   } = useQuery({
     queryKey: ["tasks"],
     queryFn: fetchTasks,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
+    retry: 2,
+    refetchOnWindowFocus: true,
+    refetchInterval: 1000 * 60 * 2,
   });
 
   const {
     data: projects,
     isLoading: projectsLoading,
     error: projectsError,
+    refetch: refetchProjects,
   } = useQuery({
     queryKey: ["projects"],
     queryFn: fetchProjects,
+    staleTime: 1000 * 60 * 10,
+    gcTime: 1000 * 60 * 30,
+    retry: 2,
+    refetchOnWindowFocus: true,
+  });
+
+  // Update task status
+  const updateTaskMutation = useMutation({
+    mutationFn: updateTaskStatus,
+    onMutate: async ({ id, status }) => {
+      await queryClient.cancelQueries({ queryKey: ["tasks"] });
+
+      const previousTasks = queryClient.getQueryData<Task[]>(["tasks"]);
+      queryClient.setQueryData<Task[]>(["tasks"], (old) => {
+        if (!old) return old;
+        return old.map((task) => (task.id === id ? { ...task, status } : task));
+      });
+      return { previousTasks };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousTasks) {
+        queryClient.setQueryData(["tasks"], context.previousTasks);
+      }
+      console.error("Failed to update task:", err);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
   });
 
   const isLoading = tasksLoading || projectsLoading;
   const error = tasksError || projectsError;
 
+  const handleRetry = () => {
+    refetchTasks();
+    refetchProjects();
+  };
+
+  const handleToggleTask = (taskId: string, currentStatus: Task["status"]) => {
+    const newStatus: Task["status"] =
+      currentStatus === "done" ? "todo" : "done";
+    updateTaskMutation.mutate({ id: taskId, status: newStatus });
+  };
+
   if (isLoading) {
     return (
       <div className="p-8 max-w-7xl mx-auto">
-        <DashboardBodyPage />
+        <DashboardSkeleton />
       </div>
     );
   }
@@ -251,7 +350,10 @@ export default function Dashboard() {
   if (error) {
     return (
       <div className="p-8 max-w-7xl mx-auto">
-        <ErrorDisplay message="Failed to load dashboard data. Please make sure JSON Server is running on port 3001." />
+        <ErrorDisplay
+          message="Failed to load dashboard data. Please make sure JSON Server is running on port 3001."
+          onRetry={handleRetry}
+        />
       </div>
     );
   }
@@ -260,7 +362,7 @@ export default function Dashboard() {
   const recentTasks = (tasks || [])
     .slice()
     .sort(
-      (a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()
+      (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
     )
     .slice(0, 5);
 
@@ -271,8 +373,6 @@ export default function Dashboard() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
-      
-
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
         <StatsCard
           title="Total Tasks"
@@ -312,7 +412,6 @@ export default function Dashboard() {
               Your most recent task updates
             </CardDescription>
           </div>
-
           <Link
             href="/tasks"
             className="text-sm text-gray-600 hover:text-blue-500 flex items-center"
@@ -331,6 +430,11 @@ export default function Dashboard() {
                   key={task.id}
                   task={task}
                   projectName={projectMap[task.projectId] || "Unknown Project"}
+                  onToggle={handleToggleTask}
+                  isUpdating={
+                    updateTaskMutation.isPending &&
+                    updateTaskMutation.variables?.id === task.id
+                  }
                 />
               ))}
             </div>

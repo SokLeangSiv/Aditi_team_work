@@ -17,7 +17,7 @@ const ProjectsPage = () => {
       <Suspense fallback={<LoadingPage />}>
         <ProjectsBodyPage />
       </Suspense>
-      
+
     </>
   );
 };
