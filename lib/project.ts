@@ -17,12 +17,14 @@ export const getProjects = async (): Promise<Project[]> => {
     return data;
 };
 
-export const getProjectBySlug = async (slug: string): Promise<Project | null> => {
-    const { data } = await api.get<Project[]>("/projects", { params: { slug } });
-    return data[0] ?? null;
-};
-
-export const createProject = async (project: Project): Promise<Project> => {
-    const { data } = await api.post<Project>("/projects", project);
+export const getProject = async (id: string): Promise<Project> => {
+    const { data } = await api.get<Project>(`/projects/${id}`);
     return data;
 };
+
+
+
+// export const createProject = async (project: Project): Promise<Project> => {
+//     const { data } = await api.post<Project>("/projects", project);
+//     return data;
+// };

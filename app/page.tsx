@@ -10,7 +10,8 @@ export default async function Dashboard() {
       <Header
         title="Dashboard"
         subTitle="Welcome back, John"
-        link="/dashboard/new"
+        link="/tasks/new"
+        newLabel="Task"
       />
       <Suspense fallback={<DashboardSkeleton />}>
         <DashboardBodyPage />

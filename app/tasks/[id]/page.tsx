@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Skeleton } from "@/components/ui/skeleton"
 
-import { getTask } from "@/lib/api"
+import { getTask } from "@/lib/tasks"
 
 /* ================= TYPES ================= */
 

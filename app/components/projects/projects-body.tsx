@@ -1,15 +1,11 @@
-// app/components/projects/projects-body.tsx
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useQuery } from '@tanstack/react-query';
 import LoadingPage from '@/app/projects/loading';
 import { getProjects, type Project } from '@/lib/project';
-import { Plus } from 'lucide-react';
 import Link from 'next/link';
-
 
 const avatarBgClasses = {
   purple: 'bg-purple-600 text-white',
@@ -45,7 +41,7 @@ export default function ProjectsBodyPage() {
         {projects.map((project) => (
           <Link
             key={project.id}
-            href={`/projects/${project.slug}`}
+            href={`/projects/${project.id}`}
             className="block rounded-xl border border-border bg-background shadow-sm p-6 hover:shadow-md transition-shadow"
             aria-label={`Open project ${project.name}`}
           >
