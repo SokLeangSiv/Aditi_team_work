@@ -22,7 +22,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import Link from "next/link";
 import { LucideIcon } from "lucide-react";
 
-
 // Types
 interface Task {
   id: string;
@@ -45,7 +44,9 @@ interface Project {
 const fetchTasks = async (): Promise<Task[]> => {
   const response = await fetch("http://localhost:3001/tasks");
   if (!response.ok) {
-    throw new Error(`Failed to fetch tasks: ${response.status} ${response.statusText}`);
+    throw new Error(
+      `Failed to fetch tasks: ${response.status} ${response.statusText}`
+    );
   }
   return response.json();
 };
@@ -53,13 +54,21 @@ const fetchTasks = async (): Promise<Task[]> => {
 const fetchProjects = async (): Promise<Project[]> => {
   const response = await fetch("http://localhost:3001/projects");
   if (!response.ok) {
-    throw new Error(`Failed to fetch projects: ${response.status} ${response.statusText}`);
+    throw new Error(
+      `Failed to fetch projects: ${response.status} ${response.statusText}`
+    );
   }
   return response.json();
 };
 
 // Update task status
-const updateTaskStatus = async ({ id, status }: { id: string; status: "todo" | "in-progress" | "done" }): Promise<Task> => {
+const updateTaskStatus = async ({
+  id,
+  status,
+}: {
+  id: string;
+  status: "todo" | "in-progress" | "done";
+}): Promise<Task> => {
   const response = await fetch(`http://localhost:3001/tasks/${id}`, {
     method: "PATCH",
     headers: {
@@ -67,15 +76,17 @@ const updateTaskStatus = async ({ id, status }: { id: string; status: "todo" | "
     },
     body: JSON.stringify({ status }),
   });
-  
+
   if (!response.ok) {
-    throw new Error(`Failed to update task: ${response.status} ${response.statusText}`);
+    throw new Error(
+      `Failed to update task: ${response.status} ${response.statusText}`
+    );
   }
-  
+
   return response.json();
 };
 
-// Calculate statistics
+// Calculate length total
 const calculateStats = (tasks: Task[]) => {
   const total = tasks.length;
   const completed = tasks.filter((t) => t.status === "done").length;
@@ -88,7 +99,7 @@ const calculateStats = (tasks: Task[]) => {
   return { total, completed, inProgress, overdue };
 };
 
-// Stats Card Component
+// Card Component
 const StatsCard = ({
   title,
   value,
@@ -100,7 +111,7 @@ const StatsCard = ({
   value: number;
   change: string;
   // icon: any;
-  icon : LucideIcon;
+  icon: LucideIcon;
   iconColor: string;
 }) => (
   <Card>
@@ -235,7 +246,13 @@ const DashboardSkeleton = () => (
 );
 
 // Error Component
-const ErrorDisplay = ({ message, onRetry }: { message: string; onRetry?: () => void }) => (
+const ErrorDisplay = ({
+  message,
+  onRetry,
+}: {
+  message: string;
+  onRetry?: () => void;
+}) => (
   <Alert variant="destructive">
     <AlertTitle>Error</AlertTitle>
     <AlertDescription className="flex items-center justify-between">
@@ -255,7 +272,6 @@ const ErrorDisplay = ({ message, onRetry }: { message: string; onRetry?: () => v
 // Main Dashboard Component
 export default function Dashboard() {
   const queryClient = useQueryClient();
-
   const {
     data: tasks,
     isLoading: tasksLoading,
@@ -285,36 +301,26 @@ export default function Dashboard() {
     refetchOnWindowFocus: true,
   });
 
-  // Mutation for updating task status
+  // Update task status
   const updateTaskMutation = useMutation({
     mutationFn: updateTaskStatus,
     onMutate: async ({ id, status }) => {
-      // Cancel outgoing refetches
       await queryClient.cancelQueries({ queryKey: ["tasks"] });
 
-      // Snapshot previous value
       const previousTasks = queryClient.getQueryData<Task[]>(["tasks"]);
-
-      // Optimistically update the cache
       queryClient.setQueryData<Task[]>(["tasks"], (old) => {
         if (!old) return old;
-        return old.map((task) =>
-          task.id === id ? { ...task, status } : task
-        );
+        return old.map((task) => (task.id === id ? { ...task, status } : task));
       });
-
-      // Return context with previous value
       return { previousTasks };
     },
     onError: (err, variables, context) => {
-      // Rollback on error
       if (context?.previousTasks) {
         queryClient.setQueryData(["tasks"], context.previousTasks);
       }
       console.error("Failed to update task:", err);
     },
     onSettled: () => {
-      // Refetch to ensure consistency
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
   });
@@ -328,7 +334,8 @@ export default function Dashboard() {
   };
 
   const handleToggleTask = (taskId: string, currentStatus: Task["status"]) => {
-    const newStatus: Task["status"] = currentStatus === "done" ? "todo" : "done";
+    const newStatus: Task["status"] =
+      currentStatus === "done" ? "todo" : "done";
     updateTaskMutation.mutate({ id: taskId, status: newStatus });
   };
 
@@ -343,8 +350,8 @@ export default function Dashboard() {
   if (error) {
     return (
       <div className="p-8 max-w-7xl mx-auto">
-        <ErrorDisplay 
-          message="Failed to load dashboard data. Please make sure JSON Server is running on port 3001." 
+        <ErrorDisplay
+          message="Failed to load dashboard data. Please make sure JSON Server is running on port 3001."
           onRetry={handleRetry}
         />
       </div>
@@ -424,7 +431,10 @@ export default function Dashboard() {
                   task={task}
                   projectName={projectMap[task.projectId] || "Unknown Project"}
                   onToggle={handleToggleTask}
-                  isUpdating={updateTaskMutation.isPending && updateTaskMutation.variables?.id === task.id}
+                  isUpdating={
+                    updateTaskMutation.isPending &&
+                    updateTaskMutation.variables?.id === task.id
+                  }
                 />
               ))}
             </div>
