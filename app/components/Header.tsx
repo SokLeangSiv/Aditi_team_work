@@ -24,7 +24,7 @@ export function Header({title, subTitle, link}: Props) {
             <Bell className="h-5 w-5" />
         </Button>
         <Button>
-          <Link href={link}>+ New Task</Link>
+          <Link href={link}>{`+ New ${title}`}</Link>
         </Button>
       </div>
 

@@ -24,7 +24,7 @@ export default function TaskBodyPage() {
           </TabsList>
         </Tabs>
 
-        <SearchInput placeholder="Search tasks..." />
+        <SearchInput />
       </div>
 
       {/* Task List */}

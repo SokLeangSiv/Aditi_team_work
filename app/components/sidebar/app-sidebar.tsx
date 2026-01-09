@@ -68,6 +68,7 @@ export function AppSidebar() {
                   </SidebarMenuItem>
                 );
               })}
+      <p>Projects</p>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

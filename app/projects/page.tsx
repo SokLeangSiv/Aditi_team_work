@@ -4,6 +4,9 @@ import LoadingPage from "./loading";
 import ProjectsBodyPage from "../components/projects/projects-body";
 
 const ProjectsPage = () => {
+
+
+
   return (
     <>
       <Header
