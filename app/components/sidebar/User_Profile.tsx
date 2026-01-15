@@ -14,7 +14,7 @@ export default function UserProfile() {
         isCollapsed ? "justify-center" : ""
       }`}
     >
-      <Avatar className="h-10 w-10">
+      <Avatar className="h-10 w-9">
         <AvatarImage src="/raksa.png" alt="John Doe" />
         <AvatarFallback>JD</AvatarFallback>
       </Avatar>

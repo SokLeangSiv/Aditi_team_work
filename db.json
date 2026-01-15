@@ -36,50 +36,6 @@
   ],
   "tasks": [
     {
-      "id": "1",
-      "title": "Design system color palette update",
-      "description": "Update the design system to include new color palette with improved accessibility.",
-      "projectId": "2",
-      "status": "todo",
-      "priority": "high",
-      "dueDate": "2025-01-20",
-      "tags": [
-        "design",
-        "accessibility"
-      ],
-      "subtasks": [
-        {
-          "id": "1",
-          "title": "Audit current color tokens",
-          "completed": true
-        },
-        {
-          "id": "2",
-          "title": "Create new color palette",
-          "completed": true
-        },
-        {
-          "id": "3",
-          "title": "Test contrast ratios",
-          "completed": false
-        }
-      ],
-      "comments": [
-        {
-          "id": "1",
-          "author": "Alice",
-          "content": "The new palette looks great!",
-          "createdAt": "2025-01-15T10:30:00Z"
-        },
-        {
-          "id": "2",
-          "author": "John",
-          "content": "Let's finalize the contrast ratios.",
-          "createdAt": "2025-01-15T11:45:00Z"
-        }
-      ]
-    },
-    {
       "id": "2",
       "title": "API documentation",
       "description": "Comprehensive documentation update for all REST API endpoints.",
@@ -95,11 +51,16 @@
         {
           "id": "1",
           "title": "Document auth endpoints",
-          "completed": false
+          "completed": true
         },
         {
           "id": "2",
           "title": "Add examples",
+          "completed": false
+        },
+        {
+          "id": "9c497b2d-a017-4f61-a388-6c8a20c673f9",
+          "title": "fdsfdgdgsd",
           "completed": false
         }
       ],
@@ -108,9 +69,9 @@
     {
       "id": "3",
       "title": "User research analysis",
-      "description": "Compile findings from recent user interviews.",
+      "description": "Compile findings from recent user interviews. Hello Raksa",
       "projectId": "1",
-      "status": "todo",
+      "status": "done",
       "priority": "low",
       "dueDate": "2025-01-10",
       "tags": [
@@ -127,6 +88,16 @@
           "id": "2",
           "title": "Create presentation",
           "completed": true
+        },
+        {
+          "id": "6def0fcd-4eca-461e-a8ca-a5e6adaf8177",
+          "title": "gdfjhfsgfdg",
+          "completed": false
+        },
+        {
+          "id": "a775fd71-7401-4a7d-a2f2-f372c2ef8546",
+          "title": "hfdgfdgfdg",
+          "completed": false
         }
       ],
       "comments": [
@@ -135,6 +106,18 @@
           "author": "Mike",
           "content": "Great insights!",
           "createdAt": "2025-01-10T16:00:00Z"
+        },
+        {
+          "id": "c6d364bc-ca4e-4244-b005-fe5df618d268",
+          "author": "You",
+          "content": "fg",
+          "createdAt": "2026-01-15T16:58:13.802Z"
+        },
+        {
+          "id": "beff73af-edb0-4eb2-97ed-a5456a5ea928",
+          "author": "You",
+          "content": "tretre",
+          "createdAt": "2026-01-15T20:48:48.469Z"
         }
       ]
     },
@@ -162,14 +145,27 @@
           "completed": false
         }
       ],
-      "comments": []
+      "comments": [
+        {
+          "id": "f0996efd-731d-4c41-8d4e-4a08af611934",
+          "author": "You",
+          "content": "fdgfdghfdg",
+          "createdAt": "2026-01-15T18:11:35.477Z"
+        },
+        {
+          "id": "d4b59d68-2bbc-4f85-b17a-9ae2e36632e2",
+          "author": "You",
+          "content": "gfdgdfgd",
+          "createdAt": "2026-01-15T18:11:37.556Z"
+        }
+      ]
     },
     {
       "id": "5",
       "title": "Newsletter campaign",
       "description": "Design and send monthly newsletter to subscribers.",
       "projectId": "1",
-      "status": "todo",
+      "status": "done",
       "priority": "medium",
       "dueDate": "2025-01-28",
       "tags": [
@@ -257,10 +253,10 @@
     {
       "id": "8",
       "title": "Social media calendar",
-      "description": "Plan Q1 social media content.",
+      "description": "Plan Q1 social media content.kl;j;k\nuihlhlkjhlk",
       "projectId": "1",
       "status": "todo",
-      "priority": "medium",
+      "priority": "high",
       "dueDate": "2025-01-08",
       "tags": [
         "marketing",
@@ -276,9 +272,102 @@
           "id": "2",
           "title": "Schedule posts",
           "completed": true
+        },
+        {
+          "id": "1d33a0fb-484b-453e-be51-9bea55161ea4",
+          "title": "New Task",
+          "completed": true
+        }
+      ],
+      "comments": [
+        {
+          "id": "5bf60d27-8aef-4852-9586-bd2d27fed737",
+          "author": "You",
+          "content": "'klm''",
+          "createdAt": "2026-01-15T16:41:43.294Z"
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "title": "Task migration",
+      "description": "Migrate from MySQL to PostgreSQL.",
+      "projectId": "3",
+      "status": "todo",
+      "priority": "high",
+      "dueDate": "2025-02-05",
+      "tags": [
+        "backend",
+        "database"
+      ],
+      "subtasks": [
+        {
+          "id": "1",
+          "title": "Schema conversion",
+          "completed": false
+        },
+        {
+          "id": "2",
+          "title": "Data migration",
+          "completed": false
         }
       ],
       "comments": []
+    },
+    {
+      "id": "8ee6",
+      "title": "uhrt",
+      "description": "gfdg",
+      "projectId": "2",
+      "priority": "medium",
+      "status": "done",
+      "dueDate": "2026-01-20",
+      "subtasks": [],
+      "comments": []
+    },
+    {
+      "id": "89b4",
+      "title": "trtwre",
+      "description": "trfdhcbfdgdf",
+      "projectId": "2",
+      "priority": "medium",
+      "status": "done",
+      "dueDate": "2026-01-15",
+      "subtasks": [
+        {
+          "id": "5c429f94-9565-483a-8f7d-fde3f570839c",
+          "title": "New Task",
+          "completed": false
+        }
+      ],
+      "comments": []
+    },
+    {
+      "id": "4392",
+      "title": "raksa",
+      "description": "fdgdhdgsd",
+      "projectId": "1",
+      "priority": "medium",
+      "status": "todo",
+      "dueDate": "2026-01-10"
+    },
+    {
+      "id": "132b",
+      "title": "aditi",
+      "description": "fdsgdghdgfsd",
+      "projectId": "2",
+      "priority": "high",
+      "status": "todo",
+      "dueDate": "2026-01-15"
+    },
+    {
+      "id": "30ef",
+      "title": "gdgsdg",
+      "description": "gsdgsd",
+      "projectId": "3",
+      "priority": "medium",
+      "status": "todo",
+      "dueDate": "2026-01-15"
     }
   ]
 }

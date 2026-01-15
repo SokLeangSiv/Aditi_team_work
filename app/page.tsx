@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import { Header } from "./components/Header";
 import DashboardBodyPage from "./components/dashboard/dashboard-body";
 import { Suspense } from "react";

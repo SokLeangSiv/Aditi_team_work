@@ -35,7 +35,7 @@ export default function RootLayout({
           <ReactQueryProvider>
             <SidebarProvider>
               <AppSidebar />
-              <main className="flex=col flex-1 min-h-screen bg-background text-foreground">
+              <main className="flex-col flex-1 min-h-screen bg-background text-foreground">
                 {children}
               </main>
             </SidebarProvider>

@@ -11,7 +11,6 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -278,7 +277,7 @@ export default function Dashboard() {
   }, {} as Record<string, string>);
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <div className="p-8 max-w-7xl mx-auto bg-gray-100">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
         <StatsCard
           title="Total Tasks"
@@ -311,12 +310,12 @@ export default function Dashboard() {
       </div>
 
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+        <CardHeader className="flex flex-col items-center justify-center-safe">
           <div>
-            <CardTitle>Recent Tasks</CardTitle>
-            <CardDescription className="mt-1">
+            <CardTitle className="font-semibold">Recent Tasks</CardTitle>
+            {/* <CardDescription className="mt-1">
               Your most recent task updates
-            </CardDescription>
+            </CardDescription> */}
           </div>
           <Link
             href="/tasks"

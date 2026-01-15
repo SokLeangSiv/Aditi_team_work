@@ -3,14 +3,22 @@
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 
-export default function SearchInput() {
+// Define the interface for the props
+interface SearchInputProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+export default function SearchInput({ value, onChange }: SearchInputProps) {
   return (
-    <div className="relative w-full max-w-sm ">
+    <div className="relative w-full max-w-sm">
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
       <Input
         type="search"
-        placeholder="Search..."
-        className="pl-10"  
+        placeholder="Search tasks..."
+        className="pl-10"
+        value={value} // Controlled component
+        onChange={(e) => onChange(e.target.value)} // Pass the string up
       />
     </div>
   );
