@@ -32,6 +32,39 @@
       "tasksTotal": 10,
       "tasksCompleted": 4,
       "dueDate": "2025-04-30"
+    },
+    {
+      "id": "5d5cevq6x",
+      "name": "cvcxvcx",
+      "description": "gfdgfdsgfdg",
+      "color": "bg-amber-500",
+      "dueDate": "2026-01-22",
+      "status": "active",
+      "slug": "cvcxvcx",
+      "tasksTotal": 0,
+      "tasksCompleted": 0
+    },
+    {
+      "id": "wp3gdocyf",
+      "name": "team kh",
+      "description": "fdsghfdhfd",
+      "color": "bg-violet-500",
+      "dueDate": "2026-01-16",
+      "status": "active",
+      "slug": "team-kh",
+      "tasksTotal": 0,
+      "tasksCompleted": 0
+    },
+    {
+      "id": "t6ex1kyeg",
+      "name": "adsf",
+      "description": "gdfgdfds",
+      "color": "bg-blue-500",
+      "dueDate": "2026-01-16",
+      "status": "active",
+      "slug": "adsf",
+      "tasksTotal": 0,
+      "tasksCompleted": 0
     }
   ],
   "tasks": [
@@ -40,7 +73,7 @@
       "title": "API documentation",
       "description": "Comprehensive documentation update for all REST API endpoints.",
       "projectId": "3",
-      "status": "todo",
+      "status": "done",
       "priority": "medium",
       "dueDate": "2025-01-25",
       "tags": [
@@ -126,7 +159,7 @@
       "title": "Performance optimization",
       "description": "Improve dashboard page load times to under 2 seconds.",
       "projectId": "3",
-      "status": "todo",
+      "status": "done",
       "priority": "high",
       "dueDate": "2025-01-22",
       "tags": [
@@ -162,10 +195,10 @@
     },
     {
       "id": "5",
-      "title": "Newsletter campaign",
+      "title": "Newsletter campaign raksa",
       "description": "Design and send monthly newsletter to subscribers.",
-      "projectId": "1",
-      "status": "done",
+      "projectId": "2",
+      "status": "in_progress",
       "priority": "medium",
       "dueDate": "2025-01-28",
       "tags": [
@@ -291,10 +324,10 @@
     {
       "id": "9",
       "title": "Task migration",
-      "description": "Migrate from MySQL to PostgreSQL.",
-      "projectId": "3",
+      "description": "Migrate from MySQL to PostgreSQL.trt4",
+      "projectId": "2",
       "status": "todo",
-      "priority": "high",
+      "priority": "medium",
       "dueDate": "2025-02-05",
       "tags": [
         "backend",
@@ -348,7 +381,7 @@
       "description": "fdgdhdgsd",
       "projectId": "1",
       "priority": "medium",
-      "status": "todo",
+      "status": "in_progress",
       "dueDate": "2026-01-10"
     },
     {
@@ -368,6 +401,105 @@
       "priority": "medium",
       "status": "todo",
       "dueDate": "2026-01-15"
+    },
+    {
+      "id": "d601",
+      "title": "gffdsfd",
+      "description": "dfdsf",
+      "projectId": "3",
+      "priority": "medium",
+      "status": "todo",
+      "dueDate": "2026-01-16"
+    },
+    {
+      "id": "befe",
+      "title": "etweytwetwe",
+      "description": "teewryryr",
+      "projectId": "2",
+      "priority": "high",
+      "status": "in_progress",
+      "dueDate": "2026-01-16"
+    },
+    {
+      "id": "f792",
+      "title": "tretgfdg",
+      "description": "gfdgfdgfd",
+      "projectId": "m4vokd",
+      "priority": "medium",
+      "status": "in_progress",
+      "dueDate": "2026-01-16"
+    },
+    {
+      "id": "99b3",
+      "title": "hgfg",
+      "description": "gfdgfdhf",
+      "projectId": "eqq0z7",
+      "priority": "medium",
+      "status": "todo",
+      "dueDate": "2026-01-16"
+    },
+    {
+      "id": "de4f",
+      "title": "ggdfgfdg",
+      "description": "gfdhgfdg",
+      "projectId": "2",
+      "priority": "medium",
+      "status": "in_progress",
+      "dueDate": "2026-01-16"
+    },
+    {
+      "id": "24c6",
+      "title": "gfgfd",
+      "description": "gfdgfdg",
+      "projectId": "eqq0z7",
+      "priority": "medium",
+      "status": "todo",
+      "dueDate": "2026-01-16"
+    },
+    {
+      "id": "fbcb",
+      "title": "gfgdf",
+      "description": "gfdgd",
+      "projectId": "t4mf7t",
+      "priority": "medium",
+      "status": "todo",
+      "dueDate": "2026-01-16"
+    },
+    {
+      "id": "4d71",
+      "title": "dfssd",
+      "description": "fdsgsd",
+      "projectId": "zld5vg",
+      "priority": "medium",
+      "status": "in_progress",
+      "dueDate": "2026-01-16"
+    },
+    {
+      "id": "f4e1",
+      "title": "fdsfdsf",
+      "description": "fdsfdsfd",
+      "projectId": "3",
+      "priority": "medium",
+      "status": "done",
+      "dueDate": "2026-01-16"
+    },
+    {
+      "id": "291d",
+      "title": "fdfdsf",
+      "description": "fdsfsd",
+      "projectId": "5d5cevq6x",
+      "priority": "high",
+      "status": "todo",
+      "dueDate": "2026-01-16"
+    },
+    {
+      "id": "dade",
+      "title": "gfdgfdhfd",
+      "description": "gfdhfdgh",
+      "projectId": "wp3gdocyf",
+      "priority": "medium",
+      "status": "todo",
+      "dueDate": "2026-01-16"
     }
   ]
 }

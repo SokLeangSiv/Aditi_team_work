@@ -1,11 +1,13 @@
 'use client';
 
-import { Progress } from '@/components/ui/progress';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { useQuery } from '@tanstack/react-query';
-import LoadingPage from '@/app/projects/loading';
-import { getProjects, type Project } from '@/lib/project';
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
+
+import LoadingPage from '@/app/projects/loading';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Progress } from '@/components/ui/progress';
+
+import { getProjects, type Project } from '@/lib/project';
 
 const avatarBgClasses = {
   purple: 'bg-purple-600 text-white',
@@ -23,20 +25,11 @@ export default function ProjectsBodyPage() {
 
   const projects = data ?? [];
 
-  if (isLoading) {
-    return <LoadingPage />;
-  }
-
-  if (error) {
-    return <div>Error loading projects</div>;
-  }
-
-  console.log('Projects data:', projects);
+  if (isLoading) return <LoadingPage />;
+  if (error) return <div className="p-6 text-red-500">Error loading projects</div>;
 
   return (
     <div className="flex-1 p-6 space-y-6">
-   
-
       <div className="space-y-6">
         {projects.map((project) => (
           <Link

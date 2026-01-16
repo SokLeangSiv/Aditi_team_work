@@ -1,19 +1,20 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
-import { useState } from "react"
-import { FolderOpenDot } from "lucide-react"
+import { FolderOpenDot, Plus } from "lucide-react"
 
 import { getProject } from "@/lib/project"
 import { getTasksByProject, type Task } from "@/lib/tasks"
 
-import { Card } from "@/components/ui/card"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 const STATUS_LABELS: Record<string, string> = {
   todo: "To Do",
@@ -29,7 +30,6 @@ function statusLabel(status: string) {
 export default function ProjectDetailPage() {
   const params = useParams()
   const projectId = params.id as string
-
   const [checkedById, setCheckedById] = useState<Record<string, boolean>>({})
 
   const { data: project } = useQuery({
@@ -73,29 +73,37 @@ export default function ProjectDetailPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="text-sm text-muted-foreground">
+      <nav className="text-sm text-muted-foreground">
         <Link href="/projects" className="hover:underline">
           Projects
         </Link>
         <span className="px-2">›</span>
         <span className="text-foreground">{project?.name}</span>
-      </div>
+      </nav>
 
-      <div className="flex items-start gap-4">
-        <div
-          className={`h-12 w-12 rounded-xl flex items-center justify-center ${
-            project?.color ?? "bg-muted"
-          }`}
-        >
-          <FolderOpenDot className="h-6 w-6 text-white" />
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start gap-4">
+          <div
+            className={`h-12 w-12 rounded-xl flex items-center justify-center ${
+              project?.color ?? "bg-muted"
+            }`}
+          >
+            <FolderOpenDot className="h-6 w-6 text-white" />
+          </div>
+
+          <div>
+            <h1 className="text-3xl font-semibold">{project?.name}</h1>
+            <p className="text-muted-foreground mt-1 max-w-3xl">
+              {project?.description}
+            </p>
+          </div>
         </div>
 
-        <div>
-          <h1 className="text-3xl font-semibold">{project?.name}</h1>
-          <p className="text-muted-foreground mt-1 max-w-3xl">
-            {project?.description}
-          </p>
-        </div>
+        <Link href={`/tasks/new?projectId=${projectId}`}>
+          <Button className="gap-2 bg-primary text-primary-foreground hover:opacity-90">
+            <Plus className="h-4 w-4" /> New Task
+          </Button>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -160,9 +168,7 @@ export default function ProjectDetailPage() {
                     <div className="flex-1 truncate">
                       <div
                         className={`text-sm font-medium ${
-                          isDone(task)
-                            ? "line-through text-muted-foreground"
-                            : ""
+                          isDone(task) ? "line-through text-muted-foreground" : ""
                         }`}
                       >
                         {task.title}
@@ -207,9 +213,7 @@ export default function ProjectDetailPage() {
           <TabsContent value="active">
             <div className="space-y-2">
               {activeTasks.length === 0 ? (
-                <div className="text-sm text-muted-foreground">
-                  No active tasks.
-                </div>
+                <div className="text-sm text-muted-foreground">No active tasks.</div>
               ) : (
                 activeTasks.map((task) => (
                   <div
@@ -247,9 +251,7 @@ export default function ProjectDetailPage() {
           <TabsContent value="completed">
             <div className="space-y-2">
               {completedTaskList.length === 0 ? (
-                <div className="text-sm text-muted-foreground">
-                  No completed tasks.
-                </div>
+                <div className="text-sm text-muted-foreground">No completed tasks.</div>
               ) : (
                 completedTaskList.map((task) => (
                   <div

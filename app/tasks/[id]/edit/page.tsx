@@ -1,34 +1,41 @@
 "use client"
 
+import { use, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { Loader2 } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import {
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormControl,
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
 import {
   Select,
-  SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectContent,
+  SelectItem,
 } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 
-import { createTask } from "@/lib/tasks"
-import { getProjects } from "@/lib/project"
 import { taskSchema, type TaskFormValues } from "@/lib/validators/task.schema"
+import { getTask, updateTask } from "@/lib/tasks"
+import { getProjects } from "@/lib/project"
 
-export default function NewTaskPage() {
+interface EditTaskPageProps {
+  params: Promise<{ id: string }>
+}
+
+export default function EditTaskPage({ params }: EditTaskPageProps) {
+  const { id: taskId } = use(params)
   const router = useRouter()
   const queryClient = useQueryClient()
 
@@ -40,7 +47,7 @@ export default function NewTaskPage() {
       projectId: "",
       priority: "medium",
       status: "todo",
-      dueDate: new Date().toISOString().split('T')[0],
+      dueDate: "",
     },
   })
 
@@ -49,11 +56,30 @@ export default function NewTaskPage() {
     queryFn: getProjects,
   })
 
+  const { data: task, isLoading: isLoadingTask } = useQuery({
+    queryKey: ["task", taskId],
+    queryFn: () => getTask(taskId),
+  })
+
+  useEffect(() => {
+    if (task) {
+      form.reset({
+        title: task.title,
+        description: task.description || "",
+        projectId: task.projectId,
+        priority: task.priority as "low" | "medium" | "high",
+        status: task.status as "todo" | "in_progress" | "done",
+        dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : "",
+      })
+    }
+  }, [task, form])
+
   const mutation = useMutation({
-    mutationFn: createTask,
+    mutationFn: (values: TaskFormValues) => updateTask(taskId, values),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] })
-      router.push("/tasks")
+      queryClient.invalidateQueries({ queryKey: ["task", taskId] })
+      router.push(`/tasks/${taskId}`)
     },
   })
 
@@ -61,11 +87,19 @@ export default function NewTaskPage() {
     mutation.mutate(values)
   }
 
+  if (isLoadingTask) {
+    return (
+      <div className="flex h-96 items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    )
+  }
+
   return (
     <div className="max-w-2xl mx-auto p-8 bg-white rounded-xl shadow-sm border mt-10">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight">Create New Task</h1>
-        <p className="text-muted-foreground">Fill in the details to assign a new task to a project.</p>
+        <h1 className="text-2xl font-bold tracking-tight">Edit Task</h1>
+        <p className="text-muted-foreground">Update the details of your task below.</p>
       </div>
 
       <Form {...form}>
@@ -91,7 +125,7 @@ export default function NewTaskPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Project</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select project" />
@@ -130,7 +164,7 @@ export default function NewTaskPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Priority</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue />
@@ -152,8 +186,8 @@ export default function NewTaskPage() {
               name="status"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Initial Status</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormLabel>Status</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue />
@@ -204,7 +238,7 @@ export default function NewTaskPage() {
               className="flex-1 h-11 bg-primary hover:opacity-90 transition-all font-semibold"
               disabled={mutation.isPending}
             >
-              {mutation.isPending ? "Creating Task..." : "Create Task"}
+              {mutation.isPending ? "Saving..." : "Save Changes"}
             </Button>
           </div>
         </form>

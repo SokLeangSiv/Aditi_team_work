@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react"; // Added useState
+import { useState } from "react";
+import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   CheckCircle2,
@@ -11,6 +12,7 @@ import {
   LucideIcon,
   XCircle,
 } from "lucide-react";
+
 import {
   Card,
   CardContent,
@@ -20,13 +22,11 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import Link from "next/link";
 
-// Import types and fetchers
 import { getProjects } from "@/lib/project";
 import { getTasks, updateTask, type Task } from "@/lib/tasks";
 
-// --- Helper Functions ---
+type FilterType = "total" | "completed" | "in_progress" | "overdue";
 
 const normalizeStatus = (status: string) => {
   return status.replace("-", "_");
@@ -58,11 +58,9 @@ const calculateStats = (tasks: Task[]) => {
     overdue,
     completionRate,
     inProgressRate,
-    overdueRate
+    overdueRate,
   };
 };
-
-// --- Sub-Components ---
 
 interface StatsCardProps {
   title: string;
@@ -71,8 +69,8 @@ interface StatsCardProps {
   trendColor?: string;
   icon: LucideIcon;
   iconColor: string;
-  onClick: () => void; // Added click handler
-  isActive: boolean;   // Added active state
+  onClick: () => void;
+  isActive: boolean;
 }
 
 const StatsCard = ({
@@ -92,16 +90,12 @@ const StatsCard = ({
     }`}
   >
     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-      <CardTitle className="text-sm font-medium text-gray-500">
-        {title}
-      </CardTitle>
+      <CardTitle className="text-sm font-medium text-gray-500">{title}</CardTitle>
       <Icon className={`h-5 w-5 ${iconColor}`} />
     </CardHeader>
     <CardContent>
       <div className="text-2xl font-bold">{value}</div>
-      <p className={`text-xs mt-1 ${trendColor || "text-gray-500"}`}>
-        {description}
-      </p>
+      <p className={`text-xs mt-1 ${trendColor || "text-gray-500"}`}>{description}</p>
     </CardContent>
   </Card>
 );
@@ -110,7 +104,7 @@ const TaskItem = ({
   task,
   projectName,
   onToggle,
-  isUpdating
+  isUpdating,
 }: {
   task: Task;
   projectName: string;
@@ -138,9 +132,12 @@ const TaskItem = ({
   const config = statusConfig[normalizedStatus] || statusConfig.todo;
 
   return (
-    <div className={`flex items-center justify-between py-3 border-b last:border-0 hover:bg-gray-50 transition-colors px-1 ${isUpdating ? "opacity-50" : ""}`}>
+    <div
+      className={`flex items-center justify-between py-3 border-b last:border-0 hover:bg-gray-50 transition-colors px-1 ${
+        isUpdating ? "opacity-50" : ""
+      }`}
+    >
       <div className="flex items-center space-x-3 flex-1 overflow-hidden">
-        {/* Interactive Checkbox */}
         <input
           type="checkbox"
           checked={task.status === "done"}
@@ -151,9 +148,11 @@ const TaskItem = ({
 
         <div className="flex-1 min-w-0">
           <Link href={`/tasks/${task.id}`} className="block group">
-            <h4 className={`font-medium truncate transition-all group-hover:text-blue-600 ${
-              task.status === "done" ? "line-through text-gray-400" : "text-gray-900"
-            }`}>
+            <h4
+              className={`font-medium truncate transition-all group-hover:text-blue-600 ${
+                task.status === "done" ? "line-through text-gray-400" : "text-gray-900"
+              }`}
+            >
               {task.title}
             </h4>
           </Link>
@@ -206,13 +205,7 @@ const DashboardSkeleton = () => (
   </div>
 );
 
-const ErrorDisplay = ({
-  message,
-  onRetry,
-}: {
-  message: string;
-  onRetry?: () => void;
-}) => (
+const ErrorDisplay = ({ message, onRetry }: { message: string; onRetry?: () => void }) => (
   <Alert variant="destructive">
     <AlertTitle>Error</AlertTitle>
     <AlertDescription className="flex items-center justify-between">
@@ -229,12 +222,8 @@ const ErrorDisplay = ({
   </Alert>
 );
 
-// --- Main Component ---
-
-type FilterType = "total" | "completed" | "in_progress" | "overdue";
-
 export default function Dashboard() {
-  const [filter, setFilter] = useState<FilterType>("total"); // State for filtering
+  const [filter, setFilter] = useState<FilterType>("total");
   const queryClient = useQueryClient();
 
   const {
@@ -300,7 +289,6 @@ export default function Dashboard() {
 
   const stats = calculateStats(tasks || []);
 
-  // Filter tasks based on selected card
   const filteredTasks = (tasks || []).filter((t) => {
     if (filter === "total") return true;
     if (filter === "completed") return t.status === "done";
@@ -311,13 +299,10 @@ export default function Dashboard() {
     return true;
   });
 
-  // Sort and slice the FILTERED list
   const displayTasks = filteredTasks
     .slice()
-    .sort(
-      (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
-    )
-    .slice(0, 5);
+    .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+    .slice(0, 10);
 
   const projectMap = (projects || []).reduce((acc, project) => {
     acc[project.id] = project.name;
@@ -328,7 +313,7 @@ export default function Dashboard() {
     total: "All Recent Tasks",
     completed: "Completed Tasks",
     in_progress: "Tasks In Progress",
-    overdue: "Overdue Tasks"
+    overdue: "Overdue Tasks",
   };
 
   return (
@@ -380,9 +365,13 @@ export default function Dashboard() {
           <div className="flex items-center space-x-2">
             <CardTitle className="font-semibold text-lg">{filterLabels[filter]}</CardTitle>
             {filter !== "total" && (
-                <Badge variant="outline" className="text-xs cursor-pointer hover:bg-gray-100" onClick={() => setFilter("total")}>
-                    Clear Filter <XCircle className="w-3 h-3 ml-1"/>
-                </Badge>
+              <Badge
+                variant="outline"
+                className="text-xs cursor-pointer hover:bg-gray-100"
+                onClick={() => setFilter("total")}
+              >
+                Clear Filter <XCircle className="w-3 h-3 ml-1" />
+              </Badge>
             )}
           </div>
           <Link
@@ -399,12 +388,12 @@ export default function Dashboard() {
               <ListTodo className="h-10 w-10 mb-3 opacity-20" />
               <p>No tasks found for this filter.</p>
               {filter !== "total" && (
-                  <button
-                    onClick={() => setFilter("total")}
-                    className="text-sm text-blue-500 hover:underline mt-2"
-                  >
-                      Show all tasks
-                  </button>
+                <button
+                  onClick={() => setFilter("total")}
+                  className="text-sm text-blue-500 hover:underline mt-2"
+                >
+                  Show all tasks
+                </button>
               )}
             </div>
           ) : (

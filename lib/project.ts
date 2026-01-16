@@ -1,5 +1,5 @@
 import { api } from "./api";
-
+import { ProjectFormValues } from "./validators/project.schema"
 export type Project = {
     id: string;
     slug: string;
@@ -12,7 +12,6 @@ export type Project = {
     dueDate?: string;
 };
 
-// 1. Define what the FORM sends (we don't expect ID or Stats from the user)
 export type CreateProjectInput = {
     name: string;
     description: string;
@@ -30,20 +29,23 @@ export const getProject = async (id: string): Promise<Project> => {
     return data;
 };
 
-// 2. Update this function to handle the logic
-export const createProject = async (input: CreateProjectInput): Promise<Project> => {
 
-    // Generate the missing data here
-    const newProject: Project = {
-        ...input,
-        id: crypto.randomUUID(), // Native browser method to generate ID
-        slug: input.name.toLowerCase().replace(/\s+/g, '-'), // "My Project" -> "my-project"
-        status: "active",
-        tasksTotal: 0,
-        tasksCompleted: 0
-    };
+export async function createProject(values: ProjectFormValues) {
+  const newProject = {
+    ...values,
+    id: Math.random().toString(36).substr(2, 9),
+    slug: values.name.toLowerCase().replace(/ /g, "-"),
+    tasksTotal: 0,
+    tasksCompleted: 0,
+  }
 
-    const { data } = await api.post<Project>("/projects", newProject);
-    return data;
-};
+  const response = await fetch("http://localhost:3001/projects", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newProject),
+  })
 
+  if (!response.ok) throw new Error("Failed to create project")
+
+  return response.json()
+}
