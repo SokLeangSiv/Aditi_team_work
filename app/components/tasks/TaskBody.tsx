@@ -70,7 +70,7 @@ export default function TaskBodyPage() {
     <div className="flex items-center justify-between w-auto mb-6 bg-bla">
 
       {/* Tabs: Set to w-auto so it only takes the space of the buttons */}
-      <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-auto">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-auto">
         <TabsList className="bg-transparent p-0 gap-2 h-auto flex flex-wrap justify-between">
           <TabsTrigger value="all" className={tabTriggerStyle}>All</TabsTrigger>
           <TabsTrigger value="todo" className={tabTriggerStyle}>To Do</TabsTrigger>

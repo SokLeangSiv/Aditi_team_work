@@ -3,6 +3,8 @@ import { FolderOpenDot, House, ListTodo } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+
 
 import {
   Sidebar,
@@ -16,10 +18,13 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import SearchInput from "../Search_Input";
+
 import UserProfile from "./User_Profile";
 import { SidebarLogo } from "./sidebar-header";
 import { ModeToggle } from "@/components/toggle-dark-mode";
 import { getProjects, type Project } from "@/lib/project";
+
+
 
 // Menu items.
 const items = [
@@ -44,7 +49,7 @@ export function AppSidebar() {
   const pathname = usePathname();
   const { state, isMobile } = useSidebar();
   const isCollapsed = state === "collapsed" && !isMobile;
-
+   const [search, setSearch] = useState("");
   const { data: projects } = useQuery<Project[]>({
     queryKey: ["projects"],
     queryFn: getProjects,
@@ -59,7 +64,11 @@ export function AppSidebar() {
       </div>
       <SidebarContent>
         <SidebarGroup>
-          <SearchInput />
+          <SearchInput
+          value={search}
+          onChange={setSearch}
+        />
+
 
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>

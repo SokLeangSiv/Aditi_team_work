@@ -6,6 +6,7 @@ import { AppSidebar } from "./components/sidebar/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ReactQueryProvider } from "@/components/react-query-provider";
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
