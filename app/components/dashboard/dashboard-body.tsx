@@ -94,7 +94,7 @@ const StatsCard = ({
       <Icon className={`h-5 w-5 ${iconColor}`} />
     </CardHeader>
     <CardContent>
-      <div className="text-2xl font-bold">{value}</div>
+      <div className="text-2xl font-bold text-blue-500">{value}</div>
       <p className={`text-xs mt-1 ${trendColor || "text-gray-500"}`}>{description}</p>
     </CardContent>
   </Card>
